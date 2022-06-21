@@ -1,0 +1,26 @@
+version: "2"
+   
+services:
+  db:
+    image: postgres
+    # env_file:
+    #   - .venv
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=postgappdb
+      - POSTGRES_USER=myprojectuser
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5432"
+
+    restart: always
+  new:
+    build: .
+    volumes:
+      - .:/mysite
+    command: sh -c "python manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
